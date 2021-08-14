@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vuex Sample</title>
+
+    <!-- CSS import -->
+    <link rel="stylesheet" href="../css/reset.css">
+
+</head>
+
+<body>
+    <xmp>
+
+      1 상태 관리란?
+        상태 관리란 한 곳에서 여러 컴포넌트 간에 공유되는 데이터를 관리한다는 것을 의미합니다.
+        데이터 공유
+            컴포넌트 <--> 컴포넌트: props, 이벤트
+            인스턴스 <--> 컴포넌트: props, 이벤트
+
+
+      2 상태 관리(State Management)가 왜 필요한가?
+       컴포넌트로 화면을 구성하는 경우 컴포넌트간의 데이터 공유가 필요합니다.
+       컴포넌트가 많은 경우 props나 이벤트를 사용하여 상태를 관리하는 것은 효율적이지 않습니다.
+       컴포넌트가 많은 경우 효율적인 컴포넌트 간의 통신이나 데이터 관리 방밥이 필요합니다.
+       그것이 Vuex 입니다.
+
+      3. Vuex란?
+       Vue.js의 상태 관리 라이브러리입니다.
+
+      4. 왜 Vuex 를 사용해야 하는가?
+      ==>
+       일반적으로 앱의 규모가 커지면서 생기는 문제점들은 다음과 같습니다.
+       . 너무 많은 props, event emit 사용
+       . Event Bus사용으로 인해 컴포넌트 간 데이터 흐름을 파악하기 어려운 경우
+      이러한 문제점이 발생 하는 경우 Vuex를 사용하면 쉽게 해결 할 수 있습니다.
+      복잡한 state down(props) / state up(event) 처리를 없애기 위해서 사용 된다.
+
+      5. Vuex 구성 5 요소
+       . view(==component) : 컴포넌트 나 인스턴스가 된다.
+       . actions : 사용자의 입력에 따라 반응할 methods.
+                   비동기적 로직을 수행
+                   this.$store.dispatch("action명", payload) 을 사용하여 호출
+       . mutations: 동기적 로직을 수행
+                   this.$store.commit("action명", payload) 을 사용하여 호출
+       . state : 컴포넌트 간에 공유할 data
+       . getters:
+
+    -------------------------------------------------------
+
+      작업1. vue 인스턴스 기능 완성. data 프로퍼티 추가. <== 각자
+          {{header}} 에는  "Vuex 사용 앱" 가 나오게
+          {{welcome}} 에는 "HELLO WORLD" 가 나오게
+          {{counter}} 에는 0 이 나오게
+
+      작업2. vue 인스턴스 기능 완성. 버튼 추가. <== 각자
+          <button v-on:click="increment">더해줘</button>
+          <button v-on:click="decrement">빼줘</button>
+
+      작업3. vuex store 만들기.
+        vue 인스턴스 data 의 welcome과 counter를 vuex store 로 옮기기.
+
+      작업4. store를 사용하여 increment 기능을 갈이 작성하여 본다.
+            4-1. 인스턴스 methods의 decrement 수정. ==> store.dispatch("increment", -1);
+            4-2. store의 actions 수정  ==> mutations.commit("increment", param )
+            4-3. store의 mutations 수정 ==> state.counter = state.counter + param;
+
+      작업5. decrement 기능을 각자 작성하여 본다. <== 각자
+            5-1. 인스턴스 methods의 decrement 수정. ==> store.dispatch("decrement", -1);
+            5-2. store의 actions 수정  ==> mutations.commit("decrement", param )
+            5-3. store의 mutations 수정 ==> state.counter = state.counter + param;
+
+      작업6. axios 를 사용하여 비동기로 외부 함수를 호출하는 기능을 추가하여 본다.
+
+            http://localhost:5050/counter   ==> 현재값 가져오기
+            http://localhost:5050/counter?step=1   ==> 1 씩 증가
+            http://localhost:5050/counter?step=-1   ==> -1 씩 감소
+            http://localhost:5050/counter?step=10  ==> 10 씩 증가
+            http://localhost:5050/counter?step=-10   ==> -10 씩 감소
+
+      작업6-1. GET 기능 구현. axios 로 "http://localhost:5050/counter" 호출하여 counter의 현재 값을 가져오는 기능을 작성하여 본다.
+            6-1-1. 인스턴스 methods의 getcount 추가. ==> store.dispatch("getcount", null );
+            6-1-2. store의 actions 수정  ==> mutations.commit("getcount", param )
+            6-1-3. store의 mutations 수정 ==> state.counter = param;
+
+      작업6-2. SET 기능 구현. axios 로 "http://localhost:5050/counter?step=숫자" 호출하여  counter 값을 변경하는 기능을 작성하여 본다.
+            6-2-1. 인스턴스 methods의 increment 수정. ==> store.dispatch("decrement", 3);
+            6-2-2. 인스턴스 methods의 decrement 수정. ==> store.dispatch("decrement", -3);
+            6-2-3. store의 actions 수정  ==> mutations.commit("decrement", param )
+            6-2-4. store의 mutations 수정 ==> state.counter = state.counter + param;
+    </xmp>
+    <div style="margin: 40px 0 0 20px;">
+        작업6. 비동기로 외부 함수 호출 기능 추가
+        <div>
+            <p>외부 함수 호출 기능을 추가하기 위해서는 서버 기능이 필요합니다.</p>
+            <p>
+                1. 실행 전에  서버를 실행하세요.
+                <a href="#" onClick="window.open('../../ES2016문법/ap09.서버통신/ap09-03.Node서버실행.html','Node서버실행','width=700,height=850,toolbar=no,menubar=no,scrollbars=no,resizable=yes');return false;" rel="nofollow">Node서버실행</a>
+            </p>
+            <p>
+                2. 브라우저로 서버 실행 여부 확인<br>
+                http://localhost:5050/counter   ==> 현재값 가져오기<br>
+                http://localhost:5050/counter?step=1   ==> 1 씩 증가<br>
+                http://localhost:5050/counter?step=10  ==> 10 씩 증가<br>
+            </p>
+        </div>
+    </div>
+    <hr>
+    <div id="app">
+        <h1>{{header}}</h1>
+        <h2>{{welcome}}</h2>
+        <h3>{{counter}}</h3>
+        <div>
+            <input type="checkbox" v-model="callapi" value="true"/>외부 api 호출
+        </div>
+        <button v-on:click="increment">더해줘</button>
+        <button v-on:click="decrement">빼줘</button>
+    </div>
+</body>
+
+</html>
+
+<!-- vue 플러그인 임포트   -->
+<script src="https://unpkg.com/vue@2.6.14/dist/vue.js">/* vue 플러그인 임포트 */</script>
+<script src="https://unpkg.com/vuex@3.3.0/dist/vuex.js"> /* vuex 플러그인 임포트 */</script>
+<script src="https://unpkg.com/vue-router@3.1.6/dist/vue-router.js"> /* vue 라우터 플러그인 임포트 */</script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"> /* axios 플러그인 임포트 */</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"> /* jQuery 플러그인 임포트 */</script>
+<script>
+
+    // Vuex 인스턴스 만들기
+    var store = new Vuex.Store({
+        actions: {
+            /* 왜 actions를 사용하나? 비동기로 외부 함수 호출하기 위해서
+             * actions 에는 메서드만 등록 가능하다.
+             * 첫번째인자: 무조건 mutations로 고정.
+             * 두번째인자: 값. store.dispatch()호출시 넘겨지는 값.
+             */
+            getcount: function( mutations/* 고정 */, param ){
+                console.log(param);
+
+                // 비동기 함수 호출 대체
+                axios({
+                    url: "http://localhost:5050/counter",  // 호출되는 서버 주소.
+                    method: "get",       // request method: get, post, delete, put
+                    params: { },  // 서버로 보내는 데이터. 예시) { data1:"test1", data2:"test2" }
+                    timeout: 30000,    // 최대 대기 시간: 30초. 30초 이상이 되면 fail 부분이 실행됨.
+                    responseType: "text",  // response로 넘어오는 데이터 형태: text, html, xml, json, jsonp, script
+                })
+                .then( (res) => {
+                    debugger;
+                    console.log(res.data);
+                    //this.message1 = res.data;
+                    mutations.commit( "getcount", res.data);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+            },
+            setcount: function( mutations/* 고정 */, param ){
+                console.log(param);
+
+                // 비동기 함수 호출 대체
+                axios({
+                    url: "http://localhost:5050/counter",  // 호출되는 서버 주소.
+                    method: "get",       // request method: get, post, delete, put
+                    params: { step: param },  // 서버로 보내는 데이터. 예시) { data1:"test1", data2:"test2" }
+                    timeout: 30000,    // 최대 대기 시간: 30초. 30초 이상이 되면 fail 부분이 실행됨.
+                    responseType: "text",  // response로 넘어오는 데이터 형태: text, html, xml, json, jsonp, script
+                })
+                .then( (res) => {
+                    debugger;
+                    console.log(res.data);
+                    //this.message1 = res.data;
+                    mutations.commit( "setcount", res.data);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+            },
+            increment: function( mutations/* 고정 */, param ){
+                mutations.commit("increment", param );
+            },
+            decrement: function( mutations/* 고정 */, param ){
+                mutations.commit("decrement", param );
+            },
+        },
+        mutations: {
+            /* 왜 mutations 를 사용하나? state 를 바꾸기 위해서
+             * mutations 에는 메서드만 등록 가능하다.
+             * 첫번째인자: 무조건 state 로 고정.
+             * 두번째인자: 값. mutations.commit() 호출시 넘겨지는 값.
+             * */
+            getcount: function(state/* 고정 */, param/* mutations.commit 호출시 넘겨지는 값 */){
+                state.counter = param;
+            },
+            setcount: function(state/* 고정 */, param/* mutations.commit 호출시 넘겨지는 값 */){
+                state.counter = param;
+            },
+            increment: function(state/* 고정 */, param/* mutations.commit 호출시 넘겨지는 값 */){
+                //state 변경
+                //this.$data.counter = this.$data.counter + 1;
+                state.counter = state.counter + param;
+            },
+            decrement: function(state/* 고정 */, param/* mutations.commit 호출시 넘겨지는 값 */){
+                //state 변경
+                //this.$data.counter = this.$data.counter - 1;
+                state.counter = state.counter - param;
+            },
+        },
+        state: {
+            /* vue인스턴스나 컴포넌트의 data 프로퍼티에 해당 */
+            welcome:"HELLO WORLD STORE",
+            counter:10
+        },
+        getters: {
+            /* state 변경 정보를 컴포넌트에 전달하는 역활.
+             * 메서드로 만들어야 하며 메서드명은 state 의 이름을 그대로 사용
+             * 첫번째인자: 무조건 state
+             * 컴포넌트에서는 computed를 사용하여 store의 state 변경 정보를 자동으로 가져오게 된다.
+             * 예시) message()=> store.getters.인자;
+             */
+             welcome: function(state/* 고정 */){
+                return state.welcome;
+            },
+            counter: function(state/* 고정 */){
+                return state.counter;
+            },
+        },
+    });
+
+    // vue 인스턴스 만들기.
+    new Vue({
+        /* edtmc^2w */
+        el: "#app",
+        data: {
+            /* 인스턴스 안에서 사용되는 변수 등록, 공유 변수 */
+            callapi: true,
+            header: "Vuex 사용 앱",
+            //welcome: "HELLO WORLD",
+            //counter: 0,
+        },
+        //template: ``,
+        methods: {
+            /* 이벤트 핸들러 등록 + 일반 함수 */
+            increment(event){
+                //console.log(event.target);
+                //this.$data.counter =  this.$data.counter + 1;
+                //this.$set(this.$data, "counter",  this.$data.counter + 1)
+
+                // 버튼을 누르면 store의 action 호출
+                // store.dispatch("액션명", 액션값)
+                if( this.$data.callapi) {
+                    store.dispatch( "setcount", 1);
+                }
+                else {
+                    store.dispatch( "increment", 1);
+                }
+            },
+            decrement(event){
+                //console.log(event.target);
+                //this.$data.counter = this.$data.counter - 1;
+                //this.$set(this.$data, "counter", this.$data.counter - 1)
+
+                // 버튼을 누르면 store의 action 호출
+                // store.dispatch("액션명", 액션값)
+                if( this.$data.callapi) {
+                    store.dispatch( "setcount", -1);
+                }
+                else {
+                    store.dispatch( "decrement", 1);
+                }
+            },
+        },
+        components: {
+            /* 전역 컴포넌트는 등록하지 않는다. */
+            /* 지역 컴포넌트나 파일 컴포넌트이면 등록해야 한다 . 예시) "태그명" : 컴포넌트명 */
+
+        },
+        computed: {
+            /* 자동처리 + 동기식. 메서드로 작성. return 필수. */
+            welcome: function() {
+                return store.getters.welcome;
+            },
+            counter: function() {
+                return store.getters.counter;
+            },
+        },
+        watch: {
+            /* 자동처리 + 비동기식. data 에 등록된 프로퍼티(변수) 모니터링. 메서드로 작성. 매개변수 필수. 외부 api 호출을 위해서 사용 */
+
+        },
+        mounted: function() {
+            console.log("mounted");
+
+            store.dispatch( "getcount");
+        },
+        updated: function() {
+            console.log("updated", JSON.stringify(this.$data) );
+        },
+    });
+
+</script>

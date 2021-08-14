@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Tick Tock</title>
+
+    <link rel="stylesheet" href="../css/reset.css"/>
+</head>
+
+<body>
+    <img src="../images/react_life_cycle.jpg" width="800px" height="600px">
+    <xmp>
+        컴포넌트 생명주기를 실습을 통해 학습한다.
+
+        1. TickTock 컴포넌트를 만드시오   <== 각자실습
+            상태값으로 counter를 추가하시오.
+            아래의 JSX를 사용.
+            <div>
+                current counter: {this.state.counter}
+            </div>
+
+        2. 1초마다 카운트를 1씩 증가시키는 코드를 작성하시오.
+            window.setInterval 만든다.
+
+        3. counter 10이되면 setInterval을 중지하시오.
+    </xmp>
+    <hr>
+
+    <div id="app">
+    </div>
+</body>
+
+</html>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.js">
+    /* 자바스크립트로 컴파일러. ES6-->ES5, JSX-->ES5 */
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/16.12.0/umd/react.development.js">
+    /* import React, { Component, PureComponent } from "react" */
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.11.0/umd/react-dom.development.js">
+    /* import ReactDOM from "react-dom" */
+</script>
+<script type="text/babel">
+    //import React, {Component, PureComponent, Fragment} from "react";
+    //import Redux from "redux";
+    //import ReactRedux, {Provider} from "react-redux";
+    //import {BrowserRouter,Switch,Router,Route,IndexRoute,Link,IndexLink,NavLink} from "react-router-dom";
+
+    console.log(React);
+
+    class TickTock extends React.Component {
+
+        static defaultProps = { /*  props의 디폴트 값 설정 */ }
+        static propsTypes = {  /* props의 프로퍼티 타입 설정 */ }
+        state = {
+            // 상태값(변수)을 정의한다.
+            counter : 0,
+            timer : null,   // 인터벌에 관한 정보를 변수로 가지고 있어야 추후 정지 가능
+        }
+        constructor(props) {
+            super()
+            // this 바인딩. 예시) this.func.handler = this.func.handler.bind(this)
+            // func 에 정의한 메서드는 반드시 this bind 처리해야 한다.
+
+            // ref 만들기. 예시) this.inputref = React.createRef()
+            this.state.timer = setInterval(() => {
+                this.setState({
+                    ...this.state,
+                    counter : this.state.counter + 1
+                });
+            }, 1000);
+        }
+        componentDidMount() {
+            // 마운트 완료 후에 실행됨 : 페이지 load 될 때 한번
+            // componentDidMount가 사용되는 경우: redux 구독 설정, focus 줄때
+        }
+        componentDidUpdate(prevProps, prevState) {
+            // 업데이트 완료 후에 실행됨 : 여러번, state 가 변경될 때마다
+            console.log("componentDidUpdate");
+            if(this.state.counter >= 10)
+            {
+                clearInterval(this.state.timer);
+            }
+        }
+        componentWillUnmount() {
+            // 언마운트 완료 후에 실행됨 : 페이지 unload 될 때 한번
+            // componentWillUnmount가 사용되는 경우: redux 구독 해제, 이벤트 핸들러 해제
+        }
+        render() { // JSX로 화면 만들기
+            return (
+                <div>
+                    current counter: {this.state.counter}
+                </div>
+            )
+        }
+    };
+    //export default rt13-03.TickTock;
+    ReactDOM.render(<TickTock></TickTock>, document.getElementById('app'));
+</script>

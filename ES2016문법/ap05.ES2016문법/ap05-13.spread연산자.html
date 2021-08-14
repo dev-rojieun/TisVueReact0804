@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>스프레드 연산자</title>
+</head>
+
+<body>
+    <xmp>
+        스프레드 사용법을 학습한다.
+
+        ES 5에서는
+        arguments 매개변수는 유사 배열 객체다.
+            length 프로퍼티가 있다.
+            Array  메서드를 사용할 수 없다.
+            arrow function에서는 arguments는 사용할 수 없다.
+
+        ES 6에서는
+        rest 매개변수는 배열이다.
+            rest 연산자(...)를 사용하여 함수의 매개변수를 작성한 형태다.
+            함수의 매개변수로 넘어오는 값들을 "배열"로 만든다.
+
+        Spread 연산자는 ... 이다.
+            이터러블(iterable) 객체를 "개별" 요소로 분리
+            이터러블(iterable) 객체에는 Array, String, Map, Set 등이 있다.
+            iterator를 생성해서 next()로 순회할 수 있는 자료구조가 이터러블
+    </xmp>
+
+    <xmp>
+    ES6 코드를 브라우저에서 실행하려면 babel 이 필요하다.
+
+    < script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.js">/* ES5로 변환 */</script>
+    < script type="text/babel">
+        // ES6 코딩
+    </script>
+    </xmp>
+</body>
+
+</html>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.js">
+    /* 자바스크립트로 컴파일러. ES6-->ES5, JSX-->ES5 */
+</script>
+<script type="text/babel">
+    const cities = ["서울", "부산", "제주"];
+    console.log( cities[0], cities[1], cities[2] );
+    console.log( ...cities ); // "서울", "부산", "제주"
+
+    const east = ["U", "K", "T"];
+    const west = ["N", "C", "G"];
+    const countries = [ ...east, ...west ]; // ... : spread 연산자
+    console.log(countries); // ["U", "K", "T", "N", "C", "G"]
+
+    let lakes = ["경포호", "화진포", "송지호", "청초호"];
+    let [first, ...rest] = lakes;  // ...rest : rest 연산자
+    console.log( first); // "경포호"
+    console.log( rest ) // ["화진포", "송지호", "청초호"]
+
+    let [city1, ...cityrest] = [...east, ...west];
+    // [...east, ...west] === ["U","K", "T", "N", "C", "G"]. [...east, ...west] : spread 연산자
+    // ...cityrest: rest 연산자
+    console.log(city1 ); // "U"
+    console.log(cityrest ); // ["K", "T", "N", "C", "G"]
+
+
+    const car1 = {
+        type:"t1",
+        color: "S1",
+        model: 2017,
+    }
+    const car2 = {
+        type:"t2",
+        color: "S2",
+        model: 2019,
+    }
+
+    const {type} = car1;
+    console.log(type); // t1
+
+    // {type} = { ...car1, ...car2 }
+    const func = function( {type} ){
+        console.log(type);
+    }
+    func( {...car1, ...car2} ); // t2n
+
+</script>

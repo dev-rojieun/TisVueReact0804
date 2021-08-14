@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+
+    <link rel="stylesheet" href="../css/reset.css"/>
+    <style>
+
+    .styleBackground {
+        padding: 50px ;
+        background-color : #ffc53a ;
+        width : 250px ;
+        height : 100px ;
+        border-radius : 10px ;
+        text-align :  center;
+    }
+    .styleButton {
+        font-size : 1em ;
+        width : 30px ;
+        height : 30px ;
+        font-family : sans-serif ;
+        color : #333333 ;
+        font-weight : bold ;
+        line-height : 3px
+    }
+    .styleText {
+        font-size : 72px ;
+        font-family : sans-serif ;
+        color : #333333 ;
+        font-weight : bold ;
+    }
+    </style>
+</head>
+
+<body>
+    <xmp>
+        '+' 버튼 클릭하면 1씩 증가 <== 혼자서
+        shift 키 와 '+' 버튼 클릭하면 10씩 증가 <== 같이
+
+        작업 순서
+        1. '+' 버튼 클릭하면 1씩 증가하는 기능은 각자 구현한다.
+            ==> onClick 이벤트를 사용하여 처리
+        2. "shift 키 와 '+' 버튼 클릭하면 10씩 증가" 같이 구현한다.
+
+        작업 내역
+        1. CounterLabel 컴포넌트 만들기 .
+           CSS는 컴포넌트안에서 인라인 스타일로 작성한다.
+           class 속성 말고 style 속성을 사용하여 작성.
+           이미 작성된 CSS 를 사용하면 된다.
+
+                /*
+                    .styleText {
+                        font-size : 72px ;
+                        font-family : sans-serif ;
+                        color : #333333 ;
+                        font-weight : bold ;
+                    }
+                */
+                style = {
+                    styleText : {...중략},
+                }
+                render(){
+                    return(
+                        <div style={this.style.styleText}>
+                            {this.props.count}
+                        </div>
+                    )
+                }
+
+        2. CounterContainer 컴포넌트 만들기 .
+           CSS는 컴포넌트안에서 인라인 스타일로 작성한다.
+           class 속성 말고 style 속성을 사용하여 작성.
+           이미 작성된 CSS 를 사용하면 된다.
+
+            /*
+            .styleBackground {
+                padding: 50px ;
+                background-color : #ffc53a ;
+                width : 250px ;
+                height : 100px ;
+                border-radius : 10px ;
+                text-align :  center
+            }
+            .styleButton {
+                font-size : 1em ;
+                width : 30px ;
+                height : 30px ;
+                font-family : sans-serif ;
+                color : #333333 ;
+                font-weight : bold ;
+                line-height : 3px
+            }
+            */
+            style = {
+                styleBackground : {...중략},
+                styleButton : {...중략},
+            }
+            increase = (e)=> {
+                // 이벤트 핸들러는 constructor에서 this bind 처리한다.
+                console.log(this);//
+                console.log(event.target);//
+            }
+            render(){
+                return(
+                    <div style={this.style.styleBackground}>
+                        <CounterLabel count={this.state.count}></CounterLabel>
+                        <button style={this.style.styleButton} onClick={this.increase}>+</button>
+                    </div>
+                );
+            }
+
+        3. ReactDOM 을 사용하여 화면에 붙인다.
+            예시)
+            ReactDOM.render(
+                <CounterContainer></CounterContainer>
+                ,
+                document.getElementById("app")
+            )
+
+    </xmp>
+	<hr>
+
+    <div id="app">
+        <div class="styleBackground">
+            <div class="styleText">
+                4
+            </div>
+            <button class="styleButton">+</button>
+        </div>
+    </div>
+</body>
+
+</html>
+
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.js">
+    /* 자바스크립트로 컴파일러. ES6-->ES5, JSX-->ES5 */
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/16.12.0/umd/react.development.js">
+    /* import React, { Component, PureComponent } from "react" */
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.11.0/umd/react-dom.development.js">
+    /* import ReactDOM from "react-dom" */
+</script>
+<script type="text/babel">
+    //import React, {Component, PureComponent, Fragment} from "react";
+    //import Redux from "redux";
+    //import ReactRedux, {Provider} from "react-redux";
+    //import {BrowserRouter,Switch,Router,Route,IndexRoute,Link,IndexLink,NavLink} from "react-router-dom";
+
+    console.log(React);
+
+    class CounterLabel extends React.Component {
+        render() { // JSX로 화면 만들기
+            const style = {
+                fontSize : "72px",
+                fontFamily : "Sans-Serif",
+                color : "#333",
+                fontWeight : "bold"
+            }
+            const {count} = this.props;
+            return (
+
+                <div style={style}>
+                    {count}
+                </div>
+            )
+        }
+    };
+
+    class CounterContainer extends React.Component {
+        state = {
+            count : 0,
+        }
+        style = {
+            styleBackground : { padding : "50px", backgroundColor:"#ffc53a", width:"250px",height:"250px", borderRadius:"10px", textAlign:"center" },
+            styleButton : { fontSize:"1em", width:"30px", height:"30px", fontFamily:"Sans-Serif",color:"#333",fontWeight:"bold",lineHeight:"3px" }
+        }
+        constructor (props){
+            super();
+            this.increase = this.increase.bind(this)
+        }
+
+        increase (e)  {
+            // 이벤트 핸들러는 constructor에서 this bind 처리한다.
+            // console.log(this);
+            // console.log(event.target);
+            this.setState({
+                ...this.state,
+                count : e.shiftKey ? this.state.count + 10 : this.state.count + 1
+            });
+        }
+        render() { // JSX로 화면 만들기
+            return (
+                <div style={this.style.styleBackground}>
+                    {/*<CounterLabel count={this.state.count}></CounterLabel>*/}    {/* 하나의 상태를 전달 */}
+                    <CounterLabel {...this.state}></CounterLabel>  {/* state 의 모든 상태를 전달 */}
+                    <button style={this.style.styleButton}  onClick={this.increase}>+</button>
+                </div>
+
+            )
+        }
+    };
+
+    ReactDOM.render(<CounterContainer></CounterContainer> ,document.getElementById("app") );
+
+</script>

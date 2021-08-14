@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+
+    <link rel="stylesheet" href="../css/reset.css" />
+
+    <style>
+        #parent {
+            background-color: lightblue;
+            padding: 50px;
+        }
+
+        #child {
+            background-color: lightcoral;
+            margin: 50px;
+            padding: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <pre>
+
+    자식 -> 부모 데이터 전달하는 예제를 작성한다.
+
+    자식 컴포넌트에서 부모 컴포넌트의 상태값을 변경하고 싶은 경우에는 상태값 올림(state up)을 이용한다.
+    상태값 올림(state up)은 부모 메서드 콜백 이다.
+
+    부모 컴포넌트에서 자식 컴포넌트로 부모의 메서드를 props 를 이용하여 전달하고
+    자식 컴포넌트에서 부모의 콜백 메서드를 호출하는 식으로 데이터를 넘긴다.
+
+    (
+        컨테이너는 리덕스로 데이터를 처리하도록 만드는게 좋다.
+
+        상위 컴포넌트에 자식 컴포넌트가 데이터 주고받기~
+
+        포함관계  :  컴포넌트 <-> 컴포넌트 간 데이터 주고받기를 할 떄는 부모가 있어야함! 부모가 매개체가 되어야함.
+        상속관계  :  부모/자식 관계라면 props 를 통해 부모메서드호출(콜백)로 주고받기 (부모가 있으니까)
+
+    )
+
+    컴포넌트 2개 만들기: Child, Parent
+
+    기능 추가
+    1. '+' 버튼 클릭하면 1씩 증가하는 기능은 각자 구현한다.
+    ==> onClick 이벤트를 사용하여 처리
+    2. "shift 키 와 '+' 버튼 클릭하면 10씩 증가" 같이 구현한다.
+
+    구글 검색: React pass parameter to parent component or call parent function on ES6
+    https://osc131.tistory.com/137
+    https://maxlibin.com/react-call-parent-function-on-es6/
+
+    </pre>
+    <hr>
+
+    <div id="app">
+        <div id="parent">
+            I am a parent
+
+            <div id="child">
+                4
+                <br/>
+                I am a child
+                <br/>
+                <button onClick="doParentToggleFromChild">
+                    toggle
+                </button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.js">
+    /* 자바스크립트로 컴파일러. ES6-->ES5, JSX-->ES5 */
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/16.12.0/umd/react.development.js">
+    /* import React, { Component, PureComponent } from "react" */
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.11.0/umd/react-dom.development.js">
+    /* import ReactDOM from "react-dom" */
+</script>
+<script type="text/babel">
+    class Child extends React.Component {
+
+        doParentToggleFromChild = (event)=>{
+            // 이벤트 핸들러는 화살표 함수로 만들면 this bind()를 생략해도 된다
+            console.log(event.target);
+
+            // 부모의 콜백 메서드를 호출 할꺼야
+            // debugger;
+            let value = event.shiftKey ? 10 : 1;
+            this.props.doParentToggleFromChild( value );
+
+        }
+
+        render() { // JSX로 화면 만들기
+            return (
+                <div id="child">
+                    {this.props.count}  {/*부모로부터 받을거야*/}
+                    <br/>
+                    I am a child
+                    <br/>
+                    <button onClick={this.doParentToggleFromChild}>  {/*부모로부터 받을거야*/}
+                        toggle
+                    </button>
+                </div>
+            )
+        }
+    };
+
+
+    class Parent extends React.Component {
+        state = {
+            // 상태값(변수)을 정의한다.
+            count : 0,
+        }
+        func = {
+            // 자식들에게 줄 메서드들을 여기 넣어두고 ...this.func 형식으로 한꺼번에 내리자.. 😎
+            // func에 정의된 메서드는 반드시 constructor에서 this를 bind() 처리해야 한다.
+            // func에는 자식 컴포넌트에 넘길 메서드만 작성한다.
+            // 왜 자식에게 부모 메서드를 넘기나? 부모의 상태값을 변경하기 위해서.
+
+            doParentToggleFromChild (value) {
+                // this.state.count = this.state.count + 1;
+                this.setState({
+                    ...this.state,
+                    count : this.state.count + value
+                });
+            }
+
+        }
+
+        constructor(props) {
+            super()
+            // this 바인딩. 예시) this.func.handler = this.func.handler.bind(this)
+            // func 에 정의한 메서드는 반드시 this bind 처리해야 한다.
+
+            // ref 만들기. 예시) this.inputref = React.createRef()
+
+            // 여기에 선언하지 않으면 func 의 doParentToggleFromChild 메서드에 this 를 사용할 수 없다.
+            this.func.doParentToggleFromChild = this.func.doParentToggleFromChild.bind(this);
+
+        }
+
+        render() { // JSX로 화면 만들기
+            return (
+                <div id="parent">
+                    I am a parent
+                    <Child {...this.state} {...this.func}></Child>
+                </div>
+            )
+        }
+    };
+    //export default Parent;
+
+    ReactDOM.render(<Parent></Parent>, document.getElementById('app'))
+</script>

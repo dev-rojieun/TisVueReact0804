@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>객체 배열 학습</title>
+    <link rel="stylesheet" href="../css/reset.css" />
+</head>
+
+<body>
+    <div>
+        <h2>Object Arrary 대해서 학습한다.</h2>
+        <ol>
+            <li class="langjs">
+                <h3 class="langjs">Object Arrary 생성</h3>
+                <pre class="langjs">
+                    <code class="langjs">
+    var objarray = [
+        { text: 'One', value: 'A' },
+        { text: 'Two', value: 'B' },
+        { text: 'Three', value: 'C' }
+    ];
+                    </code>
+                </pre>
+            </li>
+            <li class="langjs">
+                <h3 class="langjs">objarray 에 { text: 'Four', value: 'D' } 를 추가하시오.</h3>
+                <pre class="langjs">
+                    <code class="langjs">
+
+                    </code>
+                </pre>
+            </li>
+            <li class="langjs">
+                <h3 class="langjs">objarray 에서 { text: 'Two', value: 'B' } 를 { text: '2', value: '2' } 로 바꾸시오.</h3>
+                <pre class="langjs">
+                    <code class="langjs">
+
+                    </code>
+                </pre>
+            </li>
+            <li class="langjs">
+                <h3 class="langjs">objarray 에서 filter 메서드를 사용하여 text의 값이 'One' 인 객체들을 찾으시오</h3>
+                <pre class="langjs">
+                    <code class="langjs">
+
+                    </code>
+                </pre>
+            </li>
+            <li class="langjs">
+                <h3 class="langjs">objarray 에서 { text: 'Three', value: 'C' } 를 삭제하시오.</h3>
+                <pre class="langjs">
+                    <code class="langjs">
+
+                    </code>
+                </pre>
+            </li>
+            <li class="langjs">
+                <h3 class="langjs">objarray 에서 map 메서드를 사용하여 no 프로퍼티 추가하시오</h3>
+                <pre class="langjs">
+                    <code class="langjs">
+
+                    </code>
+                </pre>
+            </li>
+            <li class="langjs">
+                <h3 class="langjs">objarray 에서 reduce 메서드를 사용하여 각 요소의 value 프로퍼티 를 합쳐서 하나의 문자열로 만드시오</h3>
+                <pre class="langjs">
+                    <code class="langjs">
+
+                    </code>
+                </pre>
+            </li>
+        </ol>
+    </div>
+</body>
+
+</html>
+
+<script>
+    var objarray = [
+        { text: "One", value: "A" },
+        { text: "Two", value: "B" },
+        { text: "Three", value: "C" },
+    ];
+
+    //1. objarray 에 { text: 'Four', value: 'D' } 를 추가하시오. ==> create
+    objarray[objarray.length] = { text: "Four", value: "D" };
+    objarray.push({ text: "Four", value: "D" });
+
+    //2. objarray 에서 { text: 'Two', value: 'B' } 를 { text: '2', value: '2' } 로 바꾸시오. ==> update
+    objarray[1] = { text: "2", value: "2" };
+
+    objarray[1].text = "2";
+    objarray[1].value = "2";
+
+    //3. objarray 에서 { text: 'Three', value: 'C' } 를 삭제하시오. ==> delete
+    objarray.splice(2, 1);
+
+    //4. objarray 에서 text가 'One' 객체들을 찾으시오 ==> search
+    var arrOne = [];
+    for (var i = 0; i < objarray.length; i++) {
+        var obj = objarray[i];
+        if (obj.text === "One") {
+            // text가 'One' 이 있는 객체들을 담을 배열에 추가
+            arrOne[arrOne.length] = obj;
+        } else {
+            // 패스.
+        }
+    }
+    console.log("arrOne", arrOne); // [{ text: 'One', value: 'A' }]
+
+    var arrOne2 = objarray.filter(function (item, index, array) {
+        if (item.text === "One") {
+            return true;
+        } else {
+            return false;
+        }
+    });
+    console.log("arrOne2", arrOne2); // [{ text: 'One', value: 'A' }]
+
+    for (index in objarray) {
+        var option = objarray[index];
+        console.log("text:>> " + option.text, "value:>>" + option.value);
+
+        console.log("text:>> " + option["text"], "value:>>" + option["value"]);
+    }
+
+    for (option of objarray) {
+        console.log("text:>> " + option.text, "value:>>" + option.value);
+        console.log("text:>> " + option["text"], "value:>>" + option["value"]);
+    }
+
+    // map 함수를 사용하여 프로퍼티 추가
+    var newopt = objarray.map(function (obj, index) {
+        obj["no"] = index;
+        return obj;
+    });
+    console.log(newopt); // [  { text:"", value:"", no:0 },  { text:"", value:"", no:1 },  { text:"", value:"", no:1}]
+
+    // reduce 메서드를 사용하여 각 요소의 value 프로퍼티 를 합쳐서 하나의 문자열로 만드시오
+    var values = objarray.reduce(function (preobj, nextobj, index, array) {
+        if( preobj instanceof Object) {
+            return preobj.value +" >> " + nextobj.value ;
+        }
+        else {
+            return preobj +" >> " + nextobj.value ;
+        }
+    });
+    console.log(values);
+</script>

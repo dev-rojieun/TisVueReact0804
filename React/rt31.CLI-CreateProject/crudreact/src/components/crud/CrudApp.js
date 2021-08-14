@@ -81,7 +81,7 @@ class CrudApp extends React.Component {
 
 
           // 새로운 값에 아이디를 주기 위해 최대값+1을 지정한다.
-          var newid  = maxObj.id + 1
+          var newid  = maxObj.id + 1;
           newItem.id = newid;
 
           // 스프레드 , push 로 새로운 배열 만들기
